@@ -21,6 +21,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.marsphotos.Network.MarsApi
+import com.example.marsphotos.Repo.DefaultMarsPhotosRepository
+import com.example.marsphotos.Repo.MarsPhotoRepository
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -47,9 +49,11 @@ class MarsViewModel : ViewModel() {
      * Gets Mars photos information from the Mars API
      */
     private fun getMarsPhotos() {
+
+        val marsPhotoRepository = DefaultMarsPhotosRepository()
         viewModelScope.launch {
             marsUiState = try{
-                val listResult = MarsApi.retrofitService.getPhotos()
+                val listResult = marsPhotoRepository.getMarsPhotos()
                 MarsUiState.Success("Success: ${listResult.size} Mars photos retrieved")
             } catch (e: IOException){
                 MarsUiState.Error
